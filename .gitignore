@@ -1,0 +1,15 @@
+backend-module/.aws/credentials
+backend-module/.terraform
+backend-module/builds
+
+backend-module/*.tfstate
+backend-module/*.tfstate.*
+
+backend-module/*.auto.tfvars
+backend-module/*.auto.tfvars.json
+
+backend-module/crash.log
+backend-module/*.tfplan
+
+user_setup/
+setup.txt
