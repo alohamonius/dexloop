@@ -5,13 +5,13 @@ resource "local_file" "api_domain" {
 }
 
 resource "local_file" "api_domain2" {
-  filename        = "lambda/onNewData/api_url"
+  filename        = "lambda/dynamo-stream-handler/api_url"
   file_permission = "0666"
   content         = "${replace(module.api_gateway.default_apigatewayv2_stage_invoke_url, "wss", "https")}/"
 }
 
 resource "local_file" "connections_table_name" {
-  filename        = "lambda/onNewData/connection_table"
+  filename        = "lambda/dynamo-stream-handler/connection_table"
   file_permission = "0666"
   content         = var.connections_table_name
 }

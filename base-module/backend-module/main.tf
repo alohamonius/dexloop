@@ -22,7 +22,9 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-2"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region     = var.region
 
   # Make it faster by skipping some things
   skip_metadata_api_check     = true
@@ -36,3 +38,20 @@ provider "aws" {
 }
 
 data "aws_caller_identity" "current" {}
+
+variable "access_key" {
+  type = string
+}
+
+variable "secret_key" {
+  type = string
+}
+
+variable "region" {
+  type = string
+}
+
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}

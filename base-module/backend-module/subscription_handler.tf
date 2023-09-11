@@ -42,7 +42,7 @@
 #       principals = {
 #         account_principal = {
 #           type        = "AWS",
-#           identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/terra"]
+#           identifiers = ["arn:aws:iam::${local.account_id}:user/terra"]
 #         }
 #       }
 #     }

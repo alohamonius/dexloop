@@ -9,7 +9,7 @@ module "dynamo_stream_handler" {
   publish     = true
   store_on_s3 = true
 
-  source_path = "./lambda/onNewData"
+  source_path = "./lambda/dynamo-stream-handler"
   s3_bucket   = module.s3_bucket.s3_bucket_id
   s3_prefix   = "lambda-builds/"
 
@@ -79,7 +79,7 @@ module "dynamo_stream_handler" {
       principals = {
         account_principal = {
           type        = "AWS",
-          identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/terra"]
+          identifiers = ["arn:aws:iam::${local.account_id}:user/terra"]
         }
       }
     }

@@ -1,15 +1,27 @@
-backend-module/.aws/credentials
-backend-module/.terraform
-backend-module/builds
+# backend-module/.terraform
 
-backend-module/*.tfstate
-backend-module/*.tfstate.*
+# backend-module/*.tfstate
+# backend-module/*.tfstate.*
 
-backend-module/*.auto.tfvars
-backend-module/*.auto.tfvars.json
+# backend-module/*.auto.tfvars
+# backend-module/*.auto.tfvars.json
 
-backend-module/crash.log
-backend-module/*.tfplan
+# backend-module/crash.log
+# backend-module/*.tfplan
 
 user_setup/
 setup.txt
+
+base-module/.terraform
+*.tfstate.*
+*.tfstate
+*.tfplan
+*.tfvars
+
+base-module/crash.log
+.terraform
+
+base-module/backend-module/builds/*
+base-module/builds/*
+
+builds/*
