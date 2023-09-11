@@ -46,7 +46,7 @@ module "user_setup" {
   source         = "./user_setup"
   name           = var.user_name
   region         = var.region
-  policy_content = file("./iam/new_user.json")
+  policy_content = file("./iam/dev1.json")
 }
 
 module "back" {

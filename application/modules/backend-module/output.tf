@@ -1,3 +1,7 @@
+output "execute_uri" {
+  value = module.api_gateway.default_apigatewayv2_stage_invoke_url
+}
+
 resource "local_file" "api_domain" {
   filename        = "lambda/heartbeat/api_url"
   file_permission = "0666"

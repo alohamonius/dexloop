@@ -1,27 +1,16 @@
-# backend-module/.terraform
-
-# backend-module/*.tfstate
-# backend-module/*.tfstate.*
-
-# backend-module/*.auto.tfvars
-# backend-module/*.auto.tfvars.json
-
-# backend-module/crash.log
-# backend-module/*.tfplan
-
 user_setup/
 setup.txt
 
-base-module/.terraform
+application/.terraform
 *.tfstate.*
 *.tfstate
 *.tfplan
 *.tfvars
 
-base-module/crash.log
+application/crash.log
 .terraform
 
-base-module/backend-module/builds/*
-base-module/builds/*
+application/modules/backend-module/builds/*
+application/builds/*
 
 builds/*
