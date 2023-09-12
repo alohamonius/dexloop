@@ -13,4 +13,4 @@ application/crash.log
 application/modules/backend-module/builds/*
 application/builds/*
 
-builds/*
+application/env/*/builds

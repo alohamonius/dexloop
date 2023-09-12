@@ -1,22 +1,23 @@
-module "aws_ws_connections_table" {
-  source = "terraform-aws-modules/dynamodb-table/aws"
+# module "aws_dynamodb_table" {
+#   ource = "terraform-aws-modules/dynamodb-table/aws"
+#   name  = "ChainDexTable"
 
-  name     = var.connections_table_name
-  hash_key = "connection_id"
 
-  attributes = [
-    {
-      name = "connection_id"
-      type = "S"
-    }
-  ]
+#   hash_key = "GraphId"
 
-  tags = {
-    Terraform = "true"
-  }
-}
+#   attributes = [
+#     {
+#       name = "GraphId"
+#       type = "S"
+#     },
+#     {
+#       name = "PairId"
+#       type = "S"
+#     }
+#   ]
+# }
 
-resource "aws_dynamodb_table" "data" {
+resource "aws_dynamodb_table" "this" {
   name             = "ChainDexTable"
   billing_mode     = "PROVISIONED" # or "PAY_PER_REQUEST"
   read_capacity    = 5
