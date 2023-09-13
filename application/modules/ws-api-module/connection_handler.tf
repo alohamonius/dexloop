@@ -1,7 +1,7 @@
 module "connection_handler" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name = "ws-connection-handler"
+  function_name = "${var.prefix}-ws-connection-handler"
   description   = "AWS WS connection handler"
   handler       = "handler.lambda_handler"
   runtime       = "python3.8"
@@ -46,4 +46,5 @@ module "connection_handler" {
       }
     }
   }
+  tags = var.default_tags
 }

@@ -1,7 +1,7 @@
 module "api_gateway" {
   source = "terraform-aws-modules/apigateway-v2/aws"
 
-  name                       = "data-stream"
+  name                       = "${var.prefix}-${var.api_name}"
   description                = "My awesome AWS Websocket API Gateway"
   protocol_type              = "WEBSOCKET"
   route_selection_expression = "$request.body.action"
@@ -23,9 +23,7 @@ module "api_gateway" {
     }
   }
 
-  tags = {
-    Name = "dev-api-new"
-  }
+  tags = var.default_tags
 }
 
 resource "aws_apigatewayv2_stage" "dev" {
@@ -36,7 +34,7 @@ resource "aws_apigatewayv2_stage" "dev" {
 }
 
 resource "aws_cloudwatch_event_rule" "heartbeat" {
-  name                = "aws-ws-heartbeart"
+  name                = "${var.prefix}-aws-ws-heartbeart"
   description         = "Ping connected Websocket clients"
   schedule_expression = "rate(1 minute)"
 }

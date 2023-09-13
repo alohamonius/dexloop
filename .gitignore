@@ -14,3 +14,6 @@ application/modules/backend-module/builds/*
 application/builds/*
 
 application/env/*/builds
+
+data-miner/*
+data-miner/*/*

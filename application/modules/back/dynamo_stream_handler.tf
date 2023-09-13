@@ -1,7 +1,7 @@
 module "dynamo_stream_handler" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name = "dynamo_stream_handler"
+  function_name = "${var.prefix}-dynamo_stream_handler"
   description   = "My awesome lambda function"
   handler       = "handler.lambda_handler"
   runtime       = "python3.8"
@@ -22,16 +22,14 @@ module "dynamo_stream_handler" {
     Serverless = "Terraform"
   }
 
-  tags = {
-    Module = "lambda-with-layer"
-  }
+  tags = var.default_tags
 
   attach_policy_statements = true
   policy_statements = {
     dynamodb = {
       effect    = "Allow",
       actions   = ["dynamodb:GetItem", "dynamodb:Scan"],
-      resources = [aws_dynamodb_table.this.arn, var.connection_table]
+      resources = [aws_dynamodb_table.this.arn, var.connection_table_arn]
     },
     manage_connections = {
       effect    = "Allow",
@@ -84,5 +82,6 @@ module "dynamo_stream_handler" {
       }
     }
   }
+  depends_on = [local_file.api, local_file.table]
   #   depends_on = [aws_iam_user_policy_attachment.root_attach_policies]
 }

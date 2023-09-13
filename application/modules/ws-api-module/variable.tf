@@ -11,12 +11,23 @@ variable "region" {
   type = string
 }
 
-variable "connections_table_name" {
+variable "connection_table_name" {
   description = "Name of the DynamoDB table (connections)"
   type        = string
-  default     = "ws-connections"
 }
 
 variable "s3_bucket_id" {
   type = string
+}
+
+variable "api_name" {
+  type = string
+}
+
+variable "prefix" {
+  type = string
+}
+
+variable "default_tags" {
+  type = map(string)
 }

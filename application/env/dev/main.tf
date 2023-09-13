@@ -35,13 +35,22 @@ provider "aws" {
   # skip_requesting_account_id should be disabled to generate valid ARN in apigatewayv2_api_execution_arn
   skip_requesting_account_id = false
 }
+data "aws_caller_identity" "current" {}
+
+
 locals {
-  name_prefix = "${var.application}-${var.environment}-"
+
 }
+
+locals {
+  name_prefix = "${var.application}-${var.environment}"
+  account_id  = data.aws_caller_identity.current.account_id
+}
+
 module "tf-state" {
   source           = "../../modules/tf-state-module"
-  bucket_name      = "${local.name_prefix}tf-state-backend-dexloop-2"
-  dynamo_lock_name = "${local.name_prefix}tf-state-locking-2"
+  bucket_name      = "${local.name_prefix}-tf-state-backend-dexloop-2"
+  dynamo_lock_name = "${local.name_prefix}-tf-state-locking-2"
 }
 
 module "s3_bucket_code_storage" {
@@ -65,26 +74,41 @@ module "s3_bucket_code_storage" {
 module "api" {
   source = "../../modules/ws-api-module"
 
-  access_key             = var.aws_access_key
-  secret_key             = var.aws_secret_key
-  region                 = var.region
-  connections_table_name = "${local.name_prefix}ws-connections"
-  s3_bucket_id           = module.s3_bucket_code_storage.s3_bucket_id
+  access_key            = var.aws_access_key
+  secret_key            = var.aws_secret_key
+  region                = var.region
+  prefix                = local.name_prefix
+  s3_bucket_id          = module.s3_bucket_code_storage.s3_bucket_id
+  api_name              = "ws_api"
+  connection_table_name = "ws-connections"
+
+  default_tags = {
+    "ENV"   = var.environment,
+    "Owner" = local.account_id
+  }
 }
 
-module "back" {
-  access_key        = var.aws_access_key
-  secret_key        = var.aws_secret_key
-  region            = var.region
-  source            = "../../modules/back"
-  s3_bucket_id      = module.s3_bucket_code_storage.s3_bucket_id
-  connection_table  = "${local.name_prefix}ws-connections"
-  api_execution_arn = module.api.execution_arn
-}
+# module "back" {
+#   source                = "../../modules/back"
+#   access_key            = var.aws_access_key
+#   secret_key            = var.aws_secret_key
+#   region                = var.region
+#   prefix                = local.name_prefix
+#   s3_bucket_id          = module.s3_bucket_code_storage.s3_bucket_id
+#   api_execution_arn     = module.api.execution_arn
+#   api_arn               = module.api.api_arn
+#   api_invoke_url        = module.api.api_invoke_url
+#   connection_table_arn  = module.api.connection_table_arn
+#   connection_table_name = "ws-connections"
+#   default_tags = {
+#     "ENV"   = var.environment,
+#     "Owner" = local.account_id
+#   }
+# }
 
 # module "user_setup" {
 #   source         = "../../modules/create-user-module"
-#   name           = var.user_name
+#   name           = "${local.name_prefix}-${var.user_name}"
 #   region         = var.region
 #   policy_content = file("./iam/dev1.json")
 # }

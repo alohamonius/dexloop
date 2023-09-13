@@ -18,7 +18,7 @@
 # }
 
 resource "aws_dynamodb_table" "this" {
-  name             = "ChainDexTable"
+  name             = "${var.prefix}-ChainDexTable"
   billing_mode     = "PROVISIONED" # or "PAY_PER_REQUEST"
   read_capacity    = 5
   write_capacity   = 5
@@ -45,9 +45,6 @@ resource "aws_dynamodb_table" "this" {
     read_capacity   = 5
     write_capacity  = 5
   }
-  tags = {
-    Terraform   = true
-    Environment = "dev"
-  }
+  tags = var.default_tags
 }
 

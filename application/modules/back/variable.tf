@@ -11,7 +11,16 @@ variable "region" {
   type = string
 }
 
-variable "connection_table" {
+variable "api_arn" {
+  type = string
+}
+variable "api_invoke_url" {
+  type = string
+}
+variable "connection_table_arn" {
+  type = string
+}
+variable "connection_table_name" {
   type = string
 }
 variable "s3_bucket_id" {
@@ -19,4 +28,12 @@ variable "s3_bucket_id" {
 }
 variable "api_execution_arn" {
   type = string
+}
+
+variable "prefix" {
+  type = string
+}
+
+variable "default_tags" {
+  type = map(string)
 }

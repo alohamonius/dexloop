@@ -1,7 +1,7 @@
 module "heartbeat_handler" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name = "aws-ws-heartbeat"
+  function_name = "${var.prefix}-aws-ws-heartbeat"
   description   = "AWS WS Test Heartbeart"
   handler       = "handler.lambda_handler"
   runtime       = "python3.8"
@@ -33,6 +33,8 @@ module "heartbeat_handler" {
       resources = [module.aws_ws_connections_table.dynamodb_table_arn]
     }
   }
+  tags       = var.default_tags
+  depends_on = [module.api_gateway]
 }
 
 resource "aws_cloudwatch_event_target" "send_heartbeat" {
