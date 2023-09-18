@@ -33,7 +33,12 @@ module "heartbeat_handler" {
       resources = [module.aws_ws_connections_table.dynamodb_table_arn]
     }
   }
-  tags       = var.default_tags
+  tags = var.default_tags
+
+  attach_network_policy  = true
+  vpc_subnet_ids         = var.vpc_private_subnet_ids
+  vpc_security_group_ids = [var.lambda_security_group_id]
+
   depends_on = [module.api_gateway]
 }
 

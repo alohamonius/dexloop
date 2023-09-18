@@ -37,14 +37,13 @@ provider "aws" {
 }
 data "aws_caller_identity" "current" {}
 
-
-locals {
-
-}
-
 locals {
   name_prefix = "${var.application}-${var.environment}"
   account_id  = data.aws_caller_identity.current.account_id
+  tags = {
+    "ENV"   = var.environment,
+    "Owner" = local.account_id
+  }
 }
 
 module "tf-state" {
@@ -71,6 +70,15 @@ module "s3_bucket_code_storage" {
   }
 }
 
+module "name" {
+  source       = "../../modules/network"
+  access_key   = var.aws_access_key
+  secret_key   = var.aws_secret_key
+  region       = var.region
+  prefix       = local.name_prefix
+  default_tags = local.tags
+}
+
 module "api" {
   source = "../../modules/ws-api-module"
 
@@ -82,10 +90,13 @@ module "api" {
   api_name              = "ws_api"
   connection_table_name = "ws-connections"
 
-  default_tags = {
-    "ENV"   = var.environment,
-    "Owner" = local.account_id
-  }
+  api_gateway_security_group_id = module.name.api_gateway_security_group_id
+  lambda_security_group_id      = module.name.lambda_security_group_id
+
+  vpc_public_subnet_ids  = module.name.vpc_public_subnets
+  vpc_private_subnet_ids = module.name.vpc_private_subnets
+  integration_uri_x      = module.name.integration_uri_x
+  default_tags           = local.tags
 }
 
 # module "back" {

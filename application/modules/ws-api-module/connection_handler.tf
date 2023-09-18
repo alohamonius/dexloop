@@ -16,7 +16,7 @@ module "connection_handler" {
   allowed_triggers = {
     AllowExecutionFromAPIGateway = {
       service    = "apigateway"
-      source_arn = "${module.api_gateway.apigatewayv2_api_execution_arn}/*/*"
+      source_arn = "${module.api_gateway.apigatewayv2_api_execution_arn}/*/*/*"
     }
   }
 
@@ -46,5 +46,10 @@ module "connection_handler" {
       }
     }
   }
+
+  attach_network_policy  = true
+  vpc_subnet_ids         = var.vpc_private_subnet_ids
+  vpc_security_group_ids = [var.lambda_security_group_id]
+
   tags = var.default_tags
 }

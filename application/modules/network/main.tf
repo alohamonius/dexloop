@@ -1,20 +1,8 @@
 terraform {
-  # backend "s3" {
-  #   bucket         = "tf_state"
-  #   key            = "./terraform.tfstate"
-  #   region         = "eu-west-2"
-  #   dynamodb_table = "tf_state_locks"
-  #   encrypt        = true
-  # }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 5.0.0"
-    }
-    archive = {
-      source  = "hashicorp/archive"
-      version = "~> 2.2.0"
     }
   }
 
@@ -34,24 +22,16 @@ provider "aws" {
   # skip_requesting_account_id should be disabled to generate valid ARN in apigatewayv2_api_execution_arn
   skip_requesting_account_id = false
 
-  # shared_credentials_files = ["./.aws/credentials"]
 }
 
 data "aws_caller_identity" "current" {}
 
-variable "access_key" {
-  type = string
-}
-
-variable "secret_key" {
-  type = string
-}
-
-variable "region" {
-  type = string
-}
-
+data "aws_availability_zones" "available" {}
 
 locals {
-  account_id = data.aws_caller_identity.current.account_id
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  vpc_cidr = "10.0.0.0/16"
+
 }
+
+
