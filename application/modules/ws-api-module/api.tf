@@ -27,6 +27,7 @@ module "api_gateway" {
       integration_uri    = var.integration_uri_x
       integration_type   = "HTTP_PROXY"
       integration_method = "ANY"
+
     }
   }
 
