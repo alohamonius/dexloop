@@ -20,27 +20,9 @@ module "api_gateway" {
     },
     "$default" = {
       lambda_arn = module.connection_handler.lambda_function_invoke_arn
-    },
-    "dd" = {
-      connection_type    = "VPC_LINK"
-      vpc_link           = "my-vpc"
-      integration_uri    = var.integration_uri_x
-      integration_type   = "HTTP_PROXY"
-      integration_method = "ANY"
-
     }
   }
-
-  vpc_links = {
-    my-vpc = {
-      name               = "${var.prefix}-vpc-link"
-      security_group_ids = [var.api_gateway_security_group_id]
-      subnet_ids         = var.vpc_public_subnet_ids
-    }
-  }
-
-  tags          = var.default_tags
-  vpc_link_tags = var.default_tags
+  tags = var.default_tags
 }
 
 resource "aws_apigatewayv2_stage" "dev" {

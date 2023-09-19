@@ -15,5 +15,6 @@ application/builds/*
 
 application/env/*/builds
 
-data-miner/*
-data-miner/*/*
+data-miner/.env.dev
+data-miner/info.txt
+data-miner/node_modules

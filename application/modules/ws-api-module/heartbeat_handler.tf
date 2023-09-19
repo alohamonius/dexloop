@@ -35,10 +35,6 @@ module "heartbeat_handler" {
   }
   tags = var.default_tags
 
-  attach_network_policy  = true
-  vpc_subnet_ids         = var.vpc_private_subnet_ids
-  vpc_security_group_ids = [var.lambda_security_group_id]
-
   depends_on = [module.api_gateway]
 }
 

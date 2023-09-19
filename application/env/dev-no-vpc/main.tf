@@ -70,8 +70,9 @@ module "s3_bucket_code_storage" {
   }
 }
 
-module "name" {
-  source       = "../../modules/network"
+
+module "eks" {
+  source       = "../../modules/eks"
   access_key   = var.aws_access_key
   secret_key   = var.aws_secret_key
   region       = var.region
@@ -79,25 +80,19 @@ module "name" {
   default_tags = local.tags
 }
 
-module "api" {
-  source = "../../modules/ws-api-module"
+# module "api" {
+#   source = "../../modules/ws-api-module"
 
-  access_key            = var.aws_access_key
-  secret_key            = var.aws_secret_key
-  region                = var.region
-  prefix                = local.name_prefix
-  s3_bucket_id          = module.s3_bucket_code_storage.s3_bucket_id
-  api_name              = "ws_api"
-  connection_table_name = "ws-connections"
+#   access_key            = var.aws_access_key
+#   secret_key            = var.aws_secret_key
+#   region                = var.region
+#   prefix                = local.name_prefix
+#   s3_bucket_id          = module.s3_bucket_code_storage.s3_bucket_id
+#   api_name              = "ws_api"
+#   connection_table_name = "ws-connections"
 
-  api_gateway_security_group_id = module.name.api_gateway_security_group_id
-  lambda_security_group_id      = module.name.lambda_security_group_id
-
-  vpc_public_subnet_ids  = module.name.vpc_public_subnets
-  vpc_private_subnet_ids = module.name.vpc_private_subnets
-  integration_uri_x      = module.name.integration_uri_x
-  default_tags           = local.tags
-}
+#   default_tags = local.tags
+# }
 
 # module "back" {
 #   source                = "../../modules/back"
@@ -130,4 +125,13 @@ module "api" {
 #   secret_key = module.user_setup.user_secret_key
 #   region     = var.region
 
+# }
+
+# module "network" {
+#   source       = "../../modules/network"
+#   access_key   = var.aws_access_key
+#   secret_key   = var.aws_secret_key
+#   region       = var.region
+#   prefix       = local.name_prefix
+#   default_tags = local.tags
 # }
