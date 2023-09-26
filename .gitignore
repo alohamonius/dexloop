@@ -1,16 +1,27 @@
-user_setup/
 setup.txt
 
-application/.terraform
+aws/.terraform
+.terraform
 *.tfstate.*
 *.tfstate
 *.tfplan
 *.tfvars
 
-application/crash.log
-.terraform
+aws/crash.log
 
-application/modules/backend-module/builds/*
-application/builds/*
+aws/env/*/builds
 
-application/env/*/builds
+miner-service/.env.dev
+miner-service/info.txt
+miner-service/node_modules
+
+*/*/secret.yml
+k8s/front/secrets.yml
+k8s/miner/ecr-registry-secret.yml
+
+ws-client/dist
+ws-client/node_modules
+ws-client/docker.sh
+
+*.log
+*.*.log

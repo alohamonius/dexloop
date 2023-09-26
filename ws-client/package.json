@@ -1,0 +1,19 @@
+{
+  "name": "ws-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "next": "^13.5.2",
+    "node-fetch": "^3.3.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "ws": "^8.14.2"
+  }
+}

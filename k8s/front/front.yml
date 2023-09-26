@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  namespace: front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+        - name: front
+          # image: ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/test/client-service:latest
+          image: 559073480624.dkr.ecr.eu-west-2.amazonaws.com/test:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: front-port
+          # env:
+          #   - name: AWS_ACCOUNT
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: aws-secret
+          #         key: AWS_ACCOUNT
+          envFrom:
+            - configMapRef:
+                name: front-config
+            - secretRef:
+                name: aws-secret
+      imagePullSecrets:
+        - name: aws-secret
