@@ -21,3 +21,7 @@ k8s/miner/ecr-registry-secret.yml
 
 ws-client/dist
 ws-client/node_modules
+ws-client/docker.sh
+
+*.log
+*.*.log
