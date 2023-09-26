@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-ecr-refresh-token
+  namespace: front
+spec:
+  schedule: "0 */10 * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # serviceAccountName: sa-default
+          containers:
+            - name: job-ecr-refresh-token
+              image: odaniait/aws-kubectl:latest
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                    name: aws-secret
+                - configMapRef:
+                    name: front-config
+                    # key: AWS_REGION
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  echo "ECR TOKEN REFRESHING "
+                  ECR_TOKEN=`aws ecr get-login-password --region ${AWS_REGION}`
+                  NAMESPACE_NAME=front
+                  kubectl delete secret --ignore-not-found $DOCKER_SECRET_NAME -n $NAMESPACE_NAME
+                  kubectl create secret docker-registry $DOCKER_SECRET_NAME \
+                  --docker-server=https://${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com \
+                  --docker-username=AWS \
+                  --docker-password="${ECR_TOKEN}" \
+                  --namespace=$NAMESPACE_NAME
+                  echo "ECR TOKEN REFRESHED at $(date)"
+          restartPolicy: Never

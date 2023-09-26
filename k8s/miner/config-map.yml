@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-1
+data:
+  ecr_url: value1
+  chains: value2
