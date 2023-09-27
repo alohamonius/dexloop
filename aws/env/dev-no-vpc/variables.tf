@@ -45,3 +45,4 @@ variable "public_subnets" {
 variable "intra_subnets" {
   type = list(string)
 }
+

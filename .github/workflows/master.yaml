@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
 
+  workflow_dispatch:
+
 jobs:
   paths-filter:
     runs-on: ubuntu-latest
@@ -28,8 +30,7 @@ jobs:
     env:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       SECRET: ${{ secrets.SECRET }}
-      REGION: eu-west-2 # Set your desired AWS region
-      CLUSTER_NAME: d
+      REGION: eu-west-2
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
@@ -91,13 +92,14 @@ jobs:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       SECRET: ${{ secrets.SECRET }}
       REGION: eu-west-2 # Set your desired AWS region
-      CLUSTER_NAME: d
     steps:
       - name: Deploy
         run: |
           cd ./k8s
           aws eks update-kubeconfig --region ${{env.REGION}} --name $cluster_name
+          kubectl apply -f ./base
           kubectl apply -f ./front
+          kubectl apply -f ./miner
 
       # - name: deploy to cluster
       #   uses: kodermax/kubectl-aws-eks@master
