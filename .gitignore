@@ -15,8 +15,7 @@ miner-service/.env.dev
 miner-service/info.txt
 miner-service/node_modules
 
-*/*/secret.yml
-k8s/front/secrets.yml
+k8s/base/secrets.yml
 k8s/miner/ecr-registry-secret.yml
 
 ws-client/dist
@@ -25,3 +24,6 @@ ws-client/docker.sh
 
 *.log
 *.*.log
+
+deploy.sh
+*/docker.sh

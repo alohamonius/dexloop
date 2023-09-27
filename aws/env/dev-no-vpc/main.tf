@@ -97,19 +97,19 @@ module "s3_bucket_code_storage" {
   }
 }
 
-# module "eks" {
-#   name            = "cluster"
-#   source          = "../../modules/eks"
-#   access_key      = var.aws_access_key
-#   secret_key      = var.aws_secret_key
-#   region          = var.region
-#   prefix          = local.name_prefix
-#   default_tags    = local.tags
-#   arn_access      = local.account_arn
-#   vpc_id          = module.vpc.vpc_id
-#   private_subnets = module.vpc.private_subnets
-#   intra_subnets   = module.vpc.intra_subnets
-# }
+module "eks" {
+  name            = "cluster"
+  source          = "../../modules/eks"
+  access_key      = var.aws_access_key
+  secret_key      = var.aws_secret_key
+  region          = var.region
+  prefix          = local.name_prefix
+  default_tags    = local.tags
+  arn_access      = local.account_arn
+  vpc_id          = module.vpc.vpc_id
+  private_subnets = module.vpc.private_subnets
+  intra_subnets   = module.vpc.intra_subnets
+}
 
 module "api" {
   source = "../../modules/ws-api-module"

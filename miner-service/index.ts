@@ -24,10 +24,9 @@ const pollingJob = container.resolve(PollingJob);
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   });
-  const { polling, debug, port, chains } = parseArguments();
+  const { polling, debug, chains } = parseArguments();
 
-  getMemoryUsage();
-
+  AppLogger.info(`polling:${polling}, debug:${debug},  chains:${chains}`);
   if (polling) {
     await pollingJob.StartPollingAsync(
       chains,
