@@ -41,7 +41,7 @@ jobs:
           node-version: 18
 
       - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.ACCESS_TOKEN }}
           aws-secret-access-key: ${{ secrets.SECRET }}
@@ -51,8 +51,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
   terraform:
+    needs: configure
     runs-on: ubuntu-latest
-    if: needs.paths-filter.outputs.output1 == 'true'
+    # if: needs.paths-filter.outputs.output1 == 'true'
     steps:
       - name: AWS infrastructure
         run: |
@@ -67,11 +68,11 @@ jobs:
           ecr_front_url=$(jq -r .ecr_front_url.value terraform_output.json)
           data_dynamodb_table=$(jq -r .data_dynamodb_table.value terraform_output.json)
   build:
-    needs: configure
+    needs: [terraform]
     runs-on: ubuntu-latest
     steps:
       - name: Build miner
-        if: needs.paths-filter.outputs.output2 == 'true'
+        # if: needs.paths-filter.outputs.output2 == 'true'
         run: |
           cd /miner-service
           docker build -t miner-service .
@@ -79,7 +80,7 @@ jobs:
           docker push $ecr_miner_url:latest
 
       - name: Build client
-        if: needs.paths-filter.outputs.output3 == 'true'
+        # if: needs.paths-filter.outputs.output3 == 'true'
         run: |
           cd /ws-client
           docker build -t client-service .
@@ -87,7 +88,7 @@ jobs:
           docker push $ecr_front_url:latest
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build]
     env:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       SECRET: ${{ secrets.SECRET }}
