@@ -1,7 +1,7 @@
 module "miner_ecr" {
   source = "terraform-aws-modules/ecr/aws"
 
-  repository_name = "${var.prefix}-miner-ecr"
+  repository_name = "miner"
 
   repository_read_write_access_arns = [var.arn_access]
   create_lifecycle_policy           = true
@@ -27,7 +27,7 @@ module "miner_ecr" {
 module "front_ecr" {
   source = "terraform-aws-modules/ecr/aws"
 
-  repository_name = "${var.prefix}-front-ecr"
+  repository_name = "front"
 
   repository_read_write_access_arns = [var.arn_access]
   create_lifecycle_policy           = true

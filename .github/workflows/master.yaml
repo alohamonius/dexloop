@@ -1,4 +1,4 @@
-name: Deploy to AWS and EKS
+name: CICD
 
 on:
   push:
@@ -28,11 +28,11 @@ jobs:
   configure:
     runs-on: ubuntu-latest
     env:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      SECRET: ${{ secrets.SECRET }}
+      ACCESS_TOKEN: ${{ secrets.AWS_ACCESS_KEY }}
+      SECRET: ${{ secrets.AWS_SECRET_KEY }}
       REGION: eu-west-2
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v2
 
       - name: Set up Node.js
@@ -57,7 +57,7 @@ jobs:
     steps:
       - name: AWS infrastructure
         run: |
-          cd /aws/env/dev-no-vpc
+          cd /aws/env/dev
           # terraform init -backend-config="bucket=$TF_STATE_BUCKET_NAME"
           terraform init
           terraform apply -var-file=config/dev.tfvars -auto-approve
