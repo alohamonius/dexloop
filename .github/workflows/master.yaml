@@ -55,8 +55,8 @@ jobs:
     steps:
       - name: AWS infrastructure
         run: |
-          ls
-          pwd
+          ls -la
+      - uses: actions/checkout@v2
       - name: AWS infrastructure
         run: |
           cd ../aws/env/dev
