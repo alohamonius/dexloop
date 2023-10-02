@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: miner
-          image: $ECR
+          image: 559073480624.dkr.ecr.eu-west-2.amazonaws.com/miner:latest
           ports:
             - containerPort: 3000
           envFrom:
