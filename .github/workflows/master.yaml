@@ -53,6 +53,7 @@ jobs:
     steps:
       - name: AWS infrastructure
         run: |
+          echo pwd
           cd /aws/env/dev
           # terraform init -backend-config="bucket=$TF_STATE_BUCKET_NAME"
           terraform init
