@@ -57,7 +57,9 @@ jobs:
         run: |
           ls
           pwd
-          cd /aws/env/dev
+      - name: AWS infrastructure
+        run: |
+          cd ../aws/env/dev
           # terraform init -backend-config="bucket=$TF_STATE_BUCKET_NAME"
           terraform init
           terraform apply -var-file=config/dev.tfvars -auto-approve
