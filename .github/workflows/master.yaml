@@ -50,23 +50,11 @@ jobs:
     runs-on: ubuntu-latest
     # if: needs.paths-filter.outputs.output1 == 'true'
     steps:
-      - name: dir
-        run: pwd
-      - name: dir
-        run: |
-          ls
-          cd ..
-          ls
       - uses: actions/checkout@v2
-      - name: dir
-        run: |
-          ls
-          cd ..
-          ls
       - uses: hashicorp/setup-terraform@v2
       - name: AWS infrastructure
         run: |
-          cd ../aws/env/dev
+          cd ./aws/env/dev
           # terraform init -backend-config="bucket=$TF_STATE_BUCKET_NAME"
           terraform init
           terraform apply -var-file=config/dev.tfvars -auto-approve
