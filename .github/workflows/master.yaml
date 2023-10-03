@@ -57,6 +57,10 @@ jobs:
         run: |
           ls -la
       - uses: actions/checkout@v2
+        with:
+          sparse-checkout: |
+            .github
+            aws
       - name: AWS infrastructure
         run: |
           cd ../aws/env/dev
