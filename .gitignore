@@ -5,7 +5,7 @@ aws/.terraform
 *.tfstate.*
 *.tfstate
 *.tfplan
-*.tfvars
+# *.tfvars
 
 aws/crash.log
 
