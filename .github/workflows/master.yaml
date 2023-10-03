@@ -30,9 +30,6 @@ jobs:
     env:
       REGION: eu-west-2
     steps:
-      - uses: actions/checkout@v2
-      - uses: hashicorp/setup-terraform@v2
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -57,10 +54,7 @@ jobs:
         run: |
           ls -la
       - uses: actions/checkout@v2
-        with:
-          sparse-checkout: |
-            .github
-            aws
+      - uses: hashicorp/setup-terraform@v2
       - name: AWS infrastructure
         run: |
           cd ../aws/env/dev
