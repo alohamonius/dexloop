@@ -21,5 +21,5 @@ output "data_dynamodb_table" {
 resource "local_file" "url_for_website" {
   filename        = "../../../ws-client/public/static/ws-url"
   file_permission = "0666"
-  content         = replace(aws_apigatewayv2_stage.dev.invoke_url, "https://", "wss://")
+  content         = replace(module.api.dev_invoke_url, "https://", "wss://")
 }

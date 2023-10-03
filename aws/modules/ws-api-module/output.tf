@@ -22,3 +22,7 @@ output "connection_table_arn" {
   value       = module.aws_ws_connections_table.dynamodb_table_arn
   description = "Connection table ARN"
 }
+
+output "dev_invoke_url" {
+  value = aws_apigatewayv2_stage.dev.invoke_url
+}
