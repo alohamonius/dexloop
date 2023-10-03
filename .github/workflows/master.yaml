@@ -57,7 +57,8 @@ jobs:
           cd ./aws/env/dev
           # terraform init -backend-config="bucket=$TF_STATE_BUCKET_NAME"
           terraform init
-          terraform apply -var-file=config/dev.tfvars -var "aws_access_key=${{ secrets.AWS_SECRET_KEY }}" -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}" -auto-approve
+          terraform plan -o plan -var-file=config/dev.tfvars -var "aws_access_key=${{ secrets.AWS_SECRET_KEY }}" -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
+          terraform apply -auto-approve plan
           terraform output -json > terraform_output.json
           ws_url=$(jq -r .ws_url.value terraform_output.json)
           cluster_name=$(jq -r .eks_cluster_name.value terraform_output.json)
