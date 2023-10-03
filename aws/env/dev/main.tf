@@ -140,9 +140,9 @@ module "compute" {
   default_tags          = local.tags
 }
 
-module "user_setup" {
-  source         = "../../modules/create-user-module"
-  name           = "${local.name_prefix}-${var.user_name}"
-  region         = var.region
-  policy_content = file("./iam/dev1.json")
-}
+# module "user_setup" {
+#   source         = "../../modules/create-user-module"
+#   name           = "${local.name_prefix}-${var.user_name}"
+#   region         = var.region
+#   policy_content = file("./iam/dev1.json")
+# }
