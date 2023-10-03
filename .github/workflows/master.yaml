@@ -54,9 +54,15 @@ jobs:
         run: pwd
       - name: dir
         run: |
+          ls
           cd ..
           ls
       - uses: actions/checkout@v2
+      - name: dir
+        run: |
+          ls
+          cd ..
+          ls
       - uses: hashicorp/setup-terraform@v2
       - name: AWS infrastructure
         run: |
