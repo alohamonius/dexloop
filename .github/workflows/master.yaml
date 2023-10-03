@@ -50,9 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     # if: needs.paths-filter.outputs.output1 == 'true'
     steps:
-      - name: AWS infrastructure
-        run: |
-          ls -la
+      - name: dir
+        run: pwd
+      - name: dir
+        run: ls
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v2
       - name: AWS infrastructure
