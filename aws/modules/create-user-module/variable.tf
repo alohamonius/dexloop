@@ -28,3 +28,13 @@ variable "default_tag" {
   type    = string
   default = "terraform"
 }
+
+
+
+variable "access_key" {
+  type = string
+}
+
+variable "secret_key" {
+  type = string
+}

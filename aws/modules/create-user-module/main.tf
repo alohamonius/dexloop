@@ -10,7 +10,7 @@ resource "aws_iam_user" "new_user" {
 }
 
 resource "aws_iam_policy" "this" {
-  name        = "execution_policy"
+  name        = "execution_policy_${var.name}"
   description = "generated policy for new user"
   policy      = var.policy_content
 }

@@ -2,9 +2,9 @@ aws_access_key = ""
 aws_secret_key = ""
 
 application = "loopdex"
-environment = "dev"
-prefix      = "loopdex-dev"
-user_name   = "data-miner-developer-dev"
+environment = "test"
+prefix      = "loopdex-test"
+user_name   = "data-miner-developer-test"
 region      = "eu-west-2"
 
 vpc_cidr = "10.123.0.0/16"

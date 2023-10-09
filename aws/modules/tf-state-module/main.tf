@@ -13,6 +13,10 @@ resource "aws_s3_bucket" "terraform_state" {
   bucket        = var.bucket_name
   force_destroy = true
 
+  lifecycle {
+    create_before_destroy = true
+
+  }
 }
 
 resource "aws_s3_bucket_versioning" "terraform_bucket_versioning" {
@@ -38,5 +42,9 @@ resource "aws_dynamodb_table" "terraform_locks" {
   attribute {
     name = "LockID"
     type = "S"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

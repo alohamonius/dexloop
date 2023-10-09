@@ -20,6 +20,7 @@ module "eks" {
   subnet_ids               = var.private_subnets
   control_plane_subnet_ids = var.intra_subnets
 
+  putin_khuylo = true
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
     instance_types = ["t2.small"]
@@ -27,10 +28,11 @@ module "eks" {
     attach_cluster_primary_security_group = true
   }
 
+
   eks_managed_node_groups = {
     cluster-ldx = {
       min_size     = 1
-      max_size     = 10
+      max_size     = 1
       desired_size = 1
 
       instance_types = ["t2.small"]
@@ -41,6 +43,8 @@ module "eks" {
       }
     }
   }
+
+
 
   tags = var.default_tags
 }
