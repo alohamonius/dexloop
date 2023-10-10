@@ -1,5 +1,5 @@
 # resource "namecheap_domain_records" "my-domain-com" {
-#   domain     = "dexloop.lol"
+#   domain     = "loopdex.lol"
 #   mode       = "OVERWRITE"
 #   email_type = "NONE"
 

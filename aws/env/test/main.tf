@@ -41,7 +41,7 @@ locals {
     "ENV"   = var.environment,
     "Owner" = local.account_id
   }
-  state_bucket_name = "tf-state-backend-dexloop-${var.environment}"
+  state_bucket_name = "tf-state-backend-loopdex-${var.environment}"
   dynamo_lock_name  = "tf-state-locking-${var.environment}"
 
   connection_table = "ws-connections-${var.environment}"
@@ -152,12 +152,12 @@ module "tf-state" {
 
 
 resource "aws_route53_zone" "example" {
-  name = "dexloop.lol"
+  name = "loopdex.lol"
 }
 
 # resource "aws_route53_record" "nameservers" {
 #   allow_overwrite = true
-#   name            = "dexloop.lol"
+#   name            = "loopdex.lol"
 #   ttl             = 3600
 #   type            = "NS"
 #   zone_id         = aws_route53_zone.example.zone_id
