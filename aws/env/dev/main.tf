@@ -6,7 +6,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.0.0"
+      version = ">= 4.35.0"
     }
     archive = {
       source  = "hashicorp/archive"
@@ -75,6 +75,9 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1
   }
+  providers = {
+    aws = aws
+  }
 }
 
 module "s3_bucket_code_storage" {
@@ -138,12 +141,12 @@ module "compute" {
   default_tags          = local.tags
 }
 
-module "user_setup" {
-  source         = "../../modules/create-user-module"
-  name           = "${var.prefix}-${var.user_name}"
-  region         = var.region
-  policy_content = file("./iam/dev1.json")
-  access_key     = var.aws_access_key
-  secret_key     = var.aws_secret_key
-}
+# module "user_setup" {
+#   source         = "../../modules/create-user-module"
+#   name           = "${var.prefix}-${var.user_name}"
+#   region         = var.region
+#   policy_content = file("./iam/dev1.json")
+#   access_key     = var.aws_access_key
+#   secret_key     = var.aws_secret_key
+# }
 

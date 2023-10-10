@@ -1,29 +1,29 @@
-module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 6.0"
+# module "alb" {
+#   source  = "terraform-aws-modules/alb/aws"
+#   version = "~> 6.0"
 
-  name = "${var.prefix}-alb-sg-${var.prefix}"
+#   name = "${var.prefix}-alb-sg-${var.prefix}"
 
-  vpc_id          = module.vpc.vpc_id
-  security_groups = [module.alb_security_group.security_group_id]
-  subnets         = module.vpc.public_subnets
+#   vpc_id          = module.vpc.vpc_id
+#   security_groups = [module.alb_security_group.security_group_id]
+#   subnets         = module.vpc.public_subnets
 
-  http_tcp_listeners = [
-    {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
-      action_type        = "forward"
-    }
-  ]
+#   http_tcp_listeners = [
+#     {
+#       port               = 80
+#       protocol           = "HTTP"
+#       target_group_index = 0
+#       action_type        = "forward"
+#     }
+#   ]
 
-  target_groups = [
-    {
-      name_prefix = "l1-"
-      target_type = "lambda"
-    }
-  ]
-}
+#   target_groups = [
+#     {
+#       name_prefix = "l1-"
+#       target_type = "lambda"
+#     }
+#   ]
+# }
 
 # module "nlb" {
 #   source = "terraform-aws-modules/alb/aws"
