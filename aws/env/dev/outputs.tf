@@ -3,16 +3,16 @@
 #   description = "WS API URL"
 # }
 
-# # output "ecr_miner_url" {
-# #   value       = module.eks.ecr_miner_url
-# #   description = "ECR miner url"
-# # }
+# output "ecr_miner_url" {
+#   value       = module.eks.ecr_miner_url
+#   description = "ECR miner url"
+# }
 
-# # output "eks_cluster_name" {
-# #   value       = module.eks.eks_cluster_name
-# #   description = "EKS cluster name"
-# # }
-//cluster_endpoint
+# output "eks_cluster_name" {
+#   value       = module.eks.eks_cluster_name
+#   description = "EKS cluster name"
+# }
+# //cluster_endpoint
 
 # output "data_dynamodb_table" {
 #   value = module.compute.dynamodb_table

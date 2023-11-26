@@ -5,7 +5,26 @@ on:
     branches: [master]
   push:
     branches: [master]
-
+  workflow_dispatch:
+    inputs:
+      # Working directory input from user.
+      resource:
+        type: choice
+        description: Choose the resource
+        options:
+          - name_of_dir1
+          - name_of_dir2
+      # Terraform action you want to perform
+      action:
+        description: "Terraform Action to Perform"
+        type: choice
+        options:
+          - Terraform_apply
+          - Terraform_destroy
+env:
+  REGION: eu-west-1
+  ENVIRONMENT: dev
+  DEV_CLUSTER_KUBECONF: ${{ secrets.KUBE_CONFIG_DATA_DEV }}
 jobs:
   # paths-filter:
   #   runs-on: ubuntu-latest
@@ -20,21 +39,18 @@ jobs:
   #       with:
   #         filters: |
   #           aws:
-  #             - './aws/env/**'
+  #             - './aws/env/dev'
   #           miner:
   #             - './miner-service/**'
   #           client:
   #             - './ws-client/**'
   configure:
     runs-on: ubuntu-latest
-    env:
-      REGION: eu-west-2
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 18
-
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,16 +58,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{env.REGION}}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: "true"
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v2.0
-        with:
-          version: "v1.28.2"
-        id: install
   terraform:
     runs-on: ubuntu-latest
     needs: configure
@@ -64,9 +70,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
       - name: AWS infrastructure
         run: |
-          cd ./aws/env/dev
-          terraform init -backend-config=./config/backend.conf -force-copy 
-          terraform plan -out plan -var-file=config/dev.tfvars -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
+          echo HELLO, MY FOLDER $(pwd), ls $(ls)
+          cd ./aws/env/${{env.ENVIRONMENT}}
+          terraform init -backend-config=../config/${{env.ENVIRONMENT}}.conf -force-copy 
+          terraform plan -out plan -var-file=../config/${{env.ENVIRONMENT}}.tfvars -var "region=$REGION" -var "azs=[\"$REGIONa\",\"$REGIONb\"]" -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
           terraform apply -auto-approve plan
           terraform output -json > terraform_output.json
           ws_url=$(jq -r .ws_url.value terraform_output.json)
@@ -74,10 +81,16 @@ jobs:
           ecr_miner_url=$(jq -r .ecr_miner_url.value terraform_output.json)
           ecr_front_url=$(jq -r .ecr_front_url.value terraform_output.json)
           data_dynamodb_table=$(jq -r .data_dynamodb_table.value terraform_output.json)
+          echo table:$data_dynamodb_table, ecr_f:$ecr_front_url, ecr_m:$ecr_miner_url, ws:$ws_url
   build:
     runs-on: ubuntu-latest
     needs: [terraform]
     steps:
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
       - name: Build miner
         # if: needs.paths-filter.outputs.output2 == 'true'
         run: |
@@ -97,23 +110,46 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.0
+        with:
+          version: "v1.28.2"
+        id: install
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --region ${{env.REGION}} --name $cluster_name
       - name: Deploy
         run: |
           cd ./k8s
+          kubectl create namespace front --dry-run=client -o name 2>/dev/null || kubectl create namespace front
+          echo "$DEV_CLUSTER_KUBECONF" >> ./base/secrets.yml
           kubectl apply -f ./base
           kubectl apply -f ./front
           kubectl apply -f ./miner
+  terraform_destroy:
+    name: "Terraform_destroy"
+    if: ${{ github.event.inputs.action == 'Terraform_destroy' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.event.inputs.resource }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{env.REGION}}
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config=../config/${{env.ENVIRONMENT}}.conf -force-copy
 
-      # - name: deploy to cluster
-      #   uses: kodermax/kubectl-aws-eks@master
-      #   env:
-      #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #     ECR_REPOSITORY: my-app
-      #     IMAGE_TAG: ${{ github.sha }}
-      #   with:
-      #     args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-      # You can add more steps to deploy to EKS using kubectl here
+      - name: Terraform Destroy
+        id: destroy
+        working-directory: ${{ github.event.inputs.resource }}
+        run: terraform destroy  -var-file=../config/dev.tfvars -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -var "aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"  --auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.REGION }}

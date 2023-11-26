@@ -4,5 +4,5 @@ metadata:
   name: front-config
   namespace: front
 data:
-  AWS_REGION: "eu-west-2"
+  AWS_REGION: "eu-west-1"
   DOCKER_SECRET_NAME: aws-secret

@@ -31,7 +31,7 @@ variable "vpc_cidr" {
   type = string
 }
 variable "azs" {
-  type = list(string)
+  type = list(any)
 }
 
 variable "private_subnets" {
